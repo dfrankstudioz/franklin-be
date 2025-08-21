@@ -1,0 +1,18 @@
+services:
+  ai-middleware:
+    build:
+      context: ../ai-middleware
+      dockerfile: Dockerfile
+    ports:
+      - "9006:80"
+    env_file:
+      - .env
+    volumes:
+      - /home/frank/docker/franklin-be/ai-middleware:/app/ai-middleware:cached
+      - /home/frank/docker/franklin-be/web-ui/dist:/app/ui:cached
+      - /home/frank/docker/franklin-be/tests:/app/tests:cached
+
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
