@@ -5,6 +5,9 @@ from rag_prompt_patch import chat
 
 app = FastAPI()
 
+from router import router
+app.include_router(router)
+
 @app.post("/chat")
 async def chat_route(request: Request):
     data = await request.json()
