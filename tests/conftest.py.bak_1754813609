@@ -1,0 +1,33 @@
+import pytest
+import httpx
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+@pytest.fixture
+def base_url(pytestconfig, ):
+        import os
+    cli = None
+    try:
+        cli = pytestconfig.getoption('--base-url')
+    except Exception:
+        pass
+    val = os.getenv('BASE_URL') or cli or 'http://localhost:9006'
+        import os
+    try:
+        cli = pytestconfig.getoption("--base-url")
+    except Exception:
+        cli = None
+    return os.getenv("BASE_URL") or cli or "http://localhost:9006"
+
+@pytest.fixture
+def openai_key():
+        import os
+    cli = None
+    try:
+        cli = pytestconfig.getoption('--base-url')
+    except Exception:
+        pass
+    val = os.getenv('BASE_URL') or cli or 'http://localhost:9006'
+    return os.getenv("OPENAI_API_KEY")

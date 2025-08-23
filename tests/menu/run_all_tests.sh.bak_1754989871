@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+ROOT="$HOME/docker"
+MENU_DIR="$ROOT/tests/menu"
+LOG_DIR="$ROOT/logs"
+mkdir -p "$LOG_DIR"
+TS="$(date +%Y%m%d_%H%M%S)"
+LOGFILE="$LOG_DIR/run_all_${TS}.log"
+
+# Save original FDs for bottom status BEFORE redirecting; mirror output to log
+exec 3>&1 4>&2
+exec > >(tee -a "$LOGFILE") 2>&1
+
+SCRIPTS=(
+  "api_tests.sh"
+  "rag_tests.sh"
+  "web_ui_tests.sh"
+  "routing_tests.sh"
+  "env_config_tests.sh"
+  "docker_health_tests.sh"
+  "logs_snapshot.sh"
+  "plugins_tests.sh"
+)
+
+total=${#SCRIPTS[@]}
+ok=0 fail=0
+
+human() { local s=$1; printf "%02d:%02d:%02d" "$((s/3600))" "$(((s%3600)/60))" "$((s%60))"; }
+draw_bar_static() {
+  local completed=$1 total=$2 width=${3:-30}
+  (( completed<0 )) && completed=0
+  (( completed>total )) && completed=$total
+  local pct=$(( completed * 100 / total ))
+  local fill=$(( completed * width / total ))
+  local rest=$(( width - fill ))
+  printf "[%s%s] %3d%%" "$(printf '%*s' "$fill" '' | tr ' ' '#')" "$(printf '%*s' "$rest" '' | tr ' ' '-')" "$pct"
+}
+
+# --- fixed bottom status line support ---
+USE_TTY=0
+if [[ -t 3 && "${TERM:-}" != "dumb" && -z "${RUN_ALL_NO_TTY:-}" ]]; then USE_TTY=1; fi
+LINES=$(tput lines 2>/dev/null || echo 24)
+# Cache control sequences so we can write them to FD 3
+SC=$(tput sc 2>/dev/null || printf '\0337')   # save cursor
+RC=$(tput rc 2>/dev/null || printf '\0338')   # restore cursor
+CUP_LASTROW=$(tput cup $((LINES-1)) 0 2>/dev/null || printf '\033[%d;%dH' "$LINES" 1)
+EL_CLEAR=$(printf '\033[K')                   # clear to EOL
+
+draw_bottom() {
+  # $1 = text to render on bottom line
+  [[ $USE_TTY -eq 1 ]] || return 0
+  printf "%s%s%s%s%s" "$SC" "$CUP_LASTROW" "$EL_CLEAR" "$1" "$RC" >&3 || true
+}
+
+clear_bottom() {
+  [[ $USE_TTY -eq 1 ]] || return 0
+  printf "%s%s%s%s" "$SC" "$CUP_LASTROW" "$EL_CLEAR" "$RC" >&3 || true
+}
+
+cleanup() { clear_bottom; }
+trap cleanup EXIT
+
+echo "Run ALL started at $(date '+%F %T')  → logging to $LOGFILE"
+suite_start=$(date +%s)
+
+for i in "${!SCRIPTS[@]}"; do
+  step="${SCRIPTS[$i]}"
+  completed=$i
+
+  echo
+  echo "=== Running ${step} ($(draw_bar_static "$completed" "$total")) ${completed}/${total} ==="
+
+  start=$(date +%s)
+  bash "$MENU_DIR/$step" &
+  pid=$!
+
+  # While step runs: keep bottom line pinned with static % and live elapsed
+  hb_last=-1
+  while kill -0 "$pid" 2>/dev/null; do
+    elapsed=$(( $(date +%s) - start ))
+    line="Progress $(draw_bar_static "$completed" "$total")  ${completed}/${total}  •  ${step}  •  elapsed $(human "$elapsed")"
+    if [[ $USE_TTY -eq 1 ]]; then
+      draw_bottom "$line"
+      sleep 1
+    else
+      # no TTY: print a heartbeat every 5s to stdout
+      if (( elapsed / 5 > hb_last )); then
+        hb_last=$(( elapsed / 5 ))
+        echo "$line"
+      fi
+      sleep 1
+    fi
+  done
+
+  status=0
+  wait "$pid" || status=$?
+  elapsed=$(( $(date +%s) - start ))
+
+  if [[ $status -eq 0 ]]; then
+    echo "✓ ${step} OK  (duration: $(human "$elapsed"))"
+    ((ok++))
+  else
+    echo "✗ ${step} FAILED  (duration: $(human "$elapsed"))"
+    ((fail++))
+  fi
+
+  # After step completes: bump completed and update bottom once
+  completed=$((i+1))
+  final_line="Progress $(draw_bar_static "$completed" "$total")  ${completed}/${total}"
+  if [[ $USE_TTY -eq 1 ]]; then
+    draw_bottom "$final_line"
+  fi
+  echo "$final_line"
+done
+
+suite_elapsed=$(( $(date +%s) - suite_start ))
+clear_bottom
+echo
+echo "Summary: ${ok} OK, ${fail} failed  •  Total time: $(human "$suite_elapsed")"
+exit 0

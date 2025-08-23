@@ -1,0 +1,36 @@
+[+] Running rag_pack tests...
+
+==================================== ERRORS ====================================
+__________________ ERROR collecting rag_pack/test_list_dir.py __________________
+ImportError while importing test module '/home/frank/docker/franklin-be/tests/rag_pack/test_list_dir.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/rag_pack/test_list_dir.py:5: in <module>
+    from tools.list_dir import list_dir
+E   ModuleNotFoundError: No module named 'tools.list_dir'; 'tools' is not a package
+_________________ ERROR collecting rag_pack/test_read_file.py __________________
+ImportError while importing test module '/home/frank/docker/franklin-be/tests/rag_pack/test_read_file.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/rag_pack/test_read_file.py:5: in <module>
+    from tools.read_file import read_file
+E   ModuleNotFoundError: No module named 'tools.read_file'; 'tools' is not a package
+_______________ ERROR collecting rag_pack/test_summarize_file.py _______________
+ImportError while importing test module '/home/frank/docker/franklin-be/tests/rag_pack/test_summarize_file.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/rag_pack/test_summarize_file.py:5: in <module>
+    from tools.summarize_file import summarize_file
+E   ModuleNotFoundError: No module named 'tools.summarize_file'; 'tools' is not a package
+=========================== short test summary info ============================
+ERROR tests/rag_pack/test_list_dir.py
+ERROR tests/rag_pack/test_read_file.py
+ERROR tests/rag_pack/test_summarize_file.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 3 errors during collection !!!!!!!!!!!!!!!!!!!!
+3 errors in 0.15s

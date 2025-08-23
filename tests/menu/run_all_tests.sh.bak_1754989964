@@ -1,0 +1,126 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+ROOT="$HOME/docker"
+MENU_DIR="$ROOT/tests/menu"
+LOG_DIR="$ROOT/logs"
+mkdir -p "$LOG_DIR"
+TS="$(date +%Y%m%d_%H%M%S)"
+LOGFILE="$LOG_DIR/run_all_${TS}.log"
+
+# Keep logs on stdout+tee; status uses a separate FD to /dev/tty if possible
+exec 3>&1 4>&2
+exec > >(tee -a "$LOGFILE") 2>&1
+
+# Open /dev/tty for status (FD 9) when possible
+if [[ -w /dev/tty ]]; then
+  exec 9>/dev/tty
+  HAS_TTY=1
+else
+  HAS_TTY=0
+fi
+
+SCRIPTS=(
+  "api_tests.sh"
+  "rag_tests.sh"
+  "web_ui_tests.sh"
+  "routing_tests.sh"
+  "env_config_tests.sh"
+  "docker_health_tests.sh"
+  "logs_snapshot.sh"
+  "plugins_tests.sh"
+)
+
+total=${#SCRIPTS[@]}
+ok=0 fail=0
+
+human() { local s=$1; printf "%02d:%02d:%02d" "$((s/3600))" "$(((s%3600)/60))" "$((s%60))"; }
+draw_bar_static() {
+  local completed=$1 total=$2 width=${3:-30}
+  (( completed<0 )) && completed=0
+  (( completed>total )) && completed=$total
+  local pct=$(( completed * 100 / total ))
+  local fill=$(( completed * width / total ))
+  local rest=$(( width - fill ))
+  printf "[%s%s] %3d%%" "$(printf '%*s' "$fill" '' | tr ' ' '#')" "$(printf '%*s' "$rest" '' | tr ' ' '-')" "$pct"
+}
+
+# Minimal term controls (no tput dependency)
+CSI=$'\033['
+save_cursor()   { [[ $HAS_TTY -eq 1 ]] && printf '\0337' >&9 || true; }
+restore_cursor(){ [[ $HAS_TTY -eq 1 ]] && printf '\0338' >&9 || true; }
+to_bottom() {
+  [[ $HAS_TTY -eq 1 ]] || return 0
+  local lines
+  lines=$(stty size < /dev/tty 2>/dev/null | awk '{print $1}')
+  [[ -z "$lines" ]] && lines=24
+  # Move to last row, col 1
+  printf "%s%d;%dH" "$CSI" "$lines" 1 >&9
+}
+clear_eol()     { [[ $HAS_TTY -eq 1 ]] && printf "%sK" "$CSI" >&9 || true; }
+
+draw_status_bottom() {
+  [[ $HAS_TTY -eq 1 ]] || return 1
+  save_cursor
+  to_bottom
+  clear_eol
+  printf "%s" "$1" >&9
+  restore_cursor
+  return 0
+}
+
+echo "Run ALL started at $(date '+%F %T')  → logging to $LOGFILE"
+suite_start=$(date +%s)
+
+for i in "${!SCRIPTS[@]}"; do
+  step="${SCRIPTS[$i]}"
+  completed=$i
+
+  echo
+  echo "=== Running ${step} ($(draw_bar_static "$completed" "$total")) ${completed}/${total} ==="
+
+  start=$(date +%s)
+  bash "$MENU_DIR/$step" &
+  pid=$!
+
+  hb_last=-1
+  while kill -0 "$pid" 2>/dev/null; do
+    elapsed=$(( $(date +%s) - start ))
+    line="Progress $(draw_bar_static "$completed" "$total")  ${completed}/${total}  •  ${step}  •  elapsed $(human "$elapsed")"
+    if ! draw_status_bottom "$line"; then
+      # No /dev/tty: print a heartbeat every 5s to logs
+      if (( elapsed / 5 > hb_last )); then
+        hb_last=$(( elapsed / 5 ))
+        echo "$line"
+      fi
+    fi
+    sleep 1
+  done
+
+  status=0
+  wait "$pid" || status=$?
+  elapsed=$(( $(date +%s) - start ))
+
+  if [[ $status -eq 0 ]]; then
+    echo "✓ ${step} OK  (duration: $(human "$elapsed"))"
+    ((ok++))
+  else
+    echo "✗ ${step} FAILED  (duration: $(human "$elapsed"))"
+    ((fail++))
+  fi
+
+  completed=$((i+1))
+  final_line="Progress $(draw_bar_static "$completed" "$total")  ${completed}/${total}"
+  draw_status_bottom "$final_line" || true
+  echo "$final_line"
+done
+
+# Clear bottom line once done
+if [[ $HAS_TTY -eq 1 ]]; then
+  save_cursor; to_bottom; clear_eol; restore_cursor
+fi
+
+suite_elapsed=$(( $(date +%s) - suite_start ))
+echo
+echo "Summary: ${ok} OK, ${fail} failed  •  Total time: $(human "$suite_elapsed")"
+exit 0

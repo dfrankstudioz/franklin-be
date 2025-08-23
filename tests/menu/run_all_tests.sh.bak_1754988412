@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+ROOT="$HOME/docker"
+MENU_DIR="$ROOT/tests/menu"
+LOG_DIR="$ROOT/logs"
+mkdir -p "$LOG_DIR"
+TS="$(date +%Y%m%d_%H%M%S)"
+LOGFILE="$LOG_DIR/run_all_${TS}.log"
+
+# Save original terminal FDs BEFORE redirecting (for live spinner output)
+exec 3>&1 4>&2
+
+# Mirror stdout/stderr to logfile (keeps spinner separate on FD 3)
+exec > >(tee -a "$LOGFILE") 2>&1
+
+SCRIPTS=(
+  "api_tests.sh"
+  "rag_tests.sh"
+  "web_ui_tests.sh"
+  "routing_tests.sh"
+  "env_config_tests.sh"
+  "docker_health_tests.sh"
+  "logs_snapshot.sh"
+  "plugins_tests.sh"
+)
+
+total=${#SCRIPTS[@]}
+ok=0 fail=0
+
+human() { local s=$1; printf "%02d:%02d:%02d" "$((s/3600))" "$(((s%3600)/60))" "$((s%60))"; }
+bar() {
+  local current=$1 total=$2 width=28
+  (( current<0 )) && current=0
+  (( current>total )) && current=$total
+  local done=$(( current * width / total ))
+  local left=$(( width - done ))
+  printf "[%s%s] %d/%d" "$(printf '%*s' "$done" '' | tr ' ' '#')" "$(printf '%*s' "$left" '' | tr ' ' '-')" "$current" "$total"
+}
+
+# Decide where to render spinner: prefer FD 3 (original TTY), else /dev/tty if writable, else stderr
+if [[ -t 3 ]]; then SPIN_FD=3
+elif [[ -w /dev/tty ]]; then exec 5>/dev/tty; SPIN_FD=5
+else SPIN_FD=2; fi
+
+hide_cursor() { printf "\033[?25l" >&$SPIN_FD || true; }
+show_cursor() { printf "\033[?25h" >&$SPIN_FD || true; }
+clear_line()  { printf "\r\033[K"   >&$SPIN_FD || true; }
+
+cleanup() { show_cursor; [[ -n "${SPIN_TMP:-}" && -e "$SPIN_TMP" ]] && rm -f "$SPIN_TMP"; }
+trap cleanup EXIT
+
+echo "Run ALL started at $(date '+%F %T')  → logging to $LOGFILE" >&1
+suite_start=$(date +%s)
+hide_cursor
+
+for i in "${!SCRIPTS[@]}"; do
+  s="${SCRIPTS[$i]}"
+  idx=$((i+1))
+  echo
+  echo "=== Running $s ($(bar "$((idx-1))" "$total")) ==="
+
+  start=$(date +%s)
+  bash "$MENU_DIR/$s" &
+  pid=$!
+
+  frames='-\|/'
+  fi=0
+  while kill -0 "$pid" 2>/dev/null; do
+    elapsed=$(( $(date +%s) - start ))
+    frame=${frames:$((fi % ${#frames})):1}
+    printf "\r  %s  elapsed %s" "$frame" "$(human "$elapsed")" >&$SPIN_FD
+    sleep 0.2
+    ((fi++))
+  done
+
+  status=0
+  wait "$pid" || status=$?
+  elapsed=$(( $(date +%s) - start ))
+  clear_line
+
+  if [[ $status -eq 0 ]]; then
+    echo "✓ $s OK  (duration: $(human "$elapsed"))"
+    ((ok++))
+  else
+    echo "✗ $s FAILED  (duration: $(human "$elapsed"))"
+    ((fail++))
+  fi
+
+  echo "Progress: $(bar "$idx" "$total")"
+done
+
+suite_elapsed=$(( $(date +%s) - suite_start ))
+echo
+echo "Summary: ${ok} OK, ${fail} failed  •  Total time: $(human "$suite_elapsed"))"
+show_cursor
+exit 0

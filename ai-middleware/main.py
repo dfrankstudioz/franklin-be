@@ -1,19 +1,45 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
-from fastapi.staticfiles import StaticFiles
-from rag_prompt_patch import chat
+import os, sys
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
-app = FastAPI()
+sys.path.append(os.path.dirname(__file__))
+from rag_prompt_patch import improve_prompt_context
 
-from router import router
-app.include_router(router)
+app = FastAPI(title="Franklin AI Middleware")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+try:
+    ui_dir = "/app/ui"
+    if os.path.isdir(ui_dir):
+        from fastapi.staticfiles import StaticFiles
+        app.mount("/ui", StaticFiles(directory=ui_dir, html=True), name="ui")
+except Exception:
+    pass
+
+class ChatIn(BaseModel):
+    prompt: str
+
+@app.get("/")
+def root():
+    return {"status": "ok"}
+
+@app.get("/health")
+def health():
+    return {"ok": True}
 
 @app.post("/chat")
-async def chat_route(request: Request):
-    data = await request.json()
-    prompt = data.get("prompt", "")
-    response = chat(prompt)
-    return JSONResponse(content={"response": response})
-
-# Serve the built React UI
-app.mount("/ui", StaticFiles(directory="ui", html=True), name="ui")
+def chat(inp: ChatIn):
+    try:
+        result = improve_prompt_context(inp.prompt)
+        if isinstance(result, (str, list, dict, int, float, bool)) or result is None:
+            return {"response": result}
+        return {"response": repr(result)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

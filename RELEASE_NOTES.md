@@ -15,7 +15,7 @@
 
 ## Known Issues
 - Web UI styling is basic (polish planned in v2025.09)
-- Encrypted logic is present in ai-middleware; source not included
+- Encrypted logic is present in ai_middleware; source not included
 - Memory and timeline features are not yet available (planned v3.0)
 
 ---

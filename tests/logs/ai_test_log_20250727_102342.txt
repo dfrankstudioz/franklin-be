@@ -1,0 +1,49 @@
+[2025-07-27 10:23:42] 🧠 Starting AI Middleware Test Suite
+
+[2025-07-27 10:23:42] ▶️ Running test_ollama_status.py...
+✅ Ollama is reachable.
+
+[2025-07-27 10:23:42] ✅ test_ollama_status.py PASSED
+
+[2025-07-27 10:23:42] ▶️ Running test_gpt_relay.py...
+❌ GPT relay test failed: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
+
+[2025-07-27 10:23:42] ❌ test_gpt_relay.py FAILED
+
+[2025-07-27 10:23:42] ▶️ Running test_ai_middleware.py...
+❌ Middleware test failed: 
+
+[2025-07-27 10:23:42] ❌ test_ai_middleware.py FAILED
+
+[2025-07-27 10:23:42] ▶️ Running test_file_upload.py...
+❌ File upload test failed: 
+
+[2025-07-27 10:23:42] ❌ test_file_upload.py FAILED
+
+[2025-07-27 10:23:42] ▶️ Running test_rag.py...
+❌ RAG test failed: 
+
+[2025-07-27 10:23:44] ❌ test_rag.py FAILED
+
+[2025-07-27 10:23:44] ▶️ Running test_rag_fallback.py...
+❌ RAG fallback test failed: 
+
+[2025-07-27 10:23:45] ❌ test_rag_fallback.py FAILED
+
+[2025-07-27 10:23:45] ▶️ Running test_model_list.py...
+❌ Model list test failed: 
+
+[2025-07-27 10:23:45] ❌ test_model_list.py FAILED
+
+[2025-07-27 10:23:45] ▶️ Running test_streaming_response.py...
+✅ Streaming test passed (1 chunks).
+
+[2025-07-27 10:23:45] ✅ test_streaming_response.py PASSED
+
+[2025-07-27 10:23:45] ▶️ Running test_version_output.py...
+❌ Version test failed: 
+
+[2025-07-27 10:23:45] ❌ test_version_output.py FAILED
+
+[2025-07-27 10:23:45] ✅ All tests complete.
+

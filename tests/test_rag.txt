@@ -1,0 +1,1 @@
+The AI middleware stack routes prompts intelligently between local and cloud models. It supports streaming, document summarization, and file uploads. Core components include Ollama, GPT Relay, and a FastAPI-based router. This stack is designed to be lightweight, resilient, and fully self-hosted when needed.

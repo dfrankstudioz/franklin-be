@@ -1,0 +1,9 @@
+
+1 - test_fastapi_status.py: FastAPI /chat endpoint check
+2 - test_rag_tools.py: Validates RAG tools (list/read/summarize)
+3 - test_env_injection.py: Confirms OPENAI_API_KEY inside container
+4 - test_ui_prompt_end_to_end.py: Prompt → response UI flow
+5 - test_web_ui_mount.py: React static build is served
+6 - test_web_ui_full_suite.py: Full Playwright interaction test
+
+Use option 99 to run all tests.

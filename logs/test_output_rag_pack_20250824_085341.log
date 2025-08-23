@@ -1,0 +1,124 @@
+[+] Running rag_pack tests...
+FFF....FF.F.FFF
+=================================== FAILURES ===================================
+____________________________ test_fallback_to_chat _____________________________
+
+    def test_fallback_to_chat():
+        url = "http://localhost:9006/chat"
+        payload = {"prompt": "whats for dinner"}
+        headers = {"Content-Type": "application/json"}
+    
+        response = requests.post(url, json=payload, headers=headers)
+        assert response.status_code == 200
+    
+        result = response.json()
+        assert "response" in result
+>       assert result["response"].strip().startswith("chat("), f'Unexpected response: {result["response"]}'
+E       AssertionError: Unexpected response: Sorry, I couldn't understand the prompt.
+E       assert False
+E        +  where False = <built-in method startswith of str object at 0x7f7ab3a63810>('chat(')
+E        +    where <built-in method startswith of str object at 0x7f7ab3a63810> = "Sorry, I couldn't understand the prompt.".startswith
+E        +      where "Sorry, I couldn't understand the prompt." = <built-in method strip of str object at 0x7f7ab3a63810>()
+E        +        where <built-in method strip of str object at 0x7f7ab3a63810> = "Sorry, I couldn't understand the prompt.".strip
+
+tests/rag_pack/test_fallback_to_chat.py:19: AssertionError
+______________________________ test_list_dir_tool ______________________________
+
+    def test_list_dir_tool():
+>       result = list_dir("/memory")
+E       TypeError: 'module' object is not callable
+
+tests/rag_pack/test_list_dir.py:14: TypeError
+_______________________ test_natural_prompt_to_read_file _______________________
+
+    def test_natural_prompt_to_read_file():
+        url = "http://localhost:9006/chat"
+        payload = {"prompt": "read /memory/test.txt"}
+        headers = {"Content-Type": "application/json"}
+    
+        response = requests.post(url, json=payload, headers=headers)
+        assert response.status_code == 200, f"Expected 200 OK, got {response.status_code}"
+>       assert "read_file" in response.text, "Expected routing to read_file(...)"
+E       AssertionError: Expected routing to read_file(...)
+E       assert 'read_file' in '{"response":"This is a test file for Franklin.\\n"}'
+E        +  where '{"response":"This is a test file for Franklin.\\n"}' = <Response [200]>.text
+
+tests/rag_pack/test_natural_prompt_routing.py:16: AssertionError
+_____________________________ test_read_file_tool ______________________________
+
+    def test_read_file_tool():
+>       result = read_file("/memory/stub_file_1.txt")
+E       TypeError: 'module' object is not callable
+
+tests/rag_pack/test_read_file.py:14: TypeError
+___________________________ test_summarize_file_tool ___________________________
+
+    def test_summarize_file_tool():
+>       result = summarize_file("/memory/stub_file_1.txt")
+E       TypeError: 'module' object is not callable
+
+tests/rag_pack/test_summarize_file.py:14: TypeError
+______________________________ test_empty_prompt _______________________________
+
+    def test_empty_prompt():
+        res = requests.post("http://localhost:9006/chat", json={"prompt": ""})
+        assert res.status_code == 200
+>       assert "empty" in res.json()["response"].lower() or "invalid" in res.json()["response"].lower()
+E       assert ('empty' in "sorry, i couldn't understand the prompt." or 'invalid' in "sorry, i couldn't understand the prompt.")
+E        +  where "sorry, i couldn't understand the prompt." = <built-in method lower of str object at 0x7f7ab3a62af0>()
+E        +    where <built-in method lower of str object at 0x7f7ab3a62af0> = "Sorry, I couldn't understand the prompt.".lower
+E        +  and   "sorry, i couldn't understand the prompt." = <built-in method lower of str object at 0x7f7ab3ab4390>()
+E        +    where <built-in method lower of str object at 0x7f7ab3ab4390> = "Sorry, I couldn't understand the prompt.".lower
+
+tests/rag_pack/tests/test_rag_empty_prompt.py:6: AssertionError
+______________________________ test_missing_file _______________________________
+
+    def test_missing_file():
+        res = requests.post("http://localhost:9006/chat", json={"prompt": "summarize /memory/missing.txt"})
+        assert res.status_code == 200
+>       assert "not found" in res.json()["response"].lower()
+E       AssertionError: assert 'not found' in 'summary: 1 lines, 15 characters.'
+E        +  where 'summary: 1 lines, 15 characters.' = <built-in method lower of str object at 0x7f7ab3ab4b70>()
+E        +    where <built-in method lower of str object at 0x7f7ab3ab4b70> = 'Summary: 1 lines, 15 characters.'.lower
+
+tests/rag_pack/tests/test_rag_missing_file.py:6: AssertionError
+_______________________________ test_openai_down _______________________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f7ab3aab090>
+
+    def test_openai_down(monkeypatch):
+        monkeypatch.setenv("OPENAI_API_KEY", "invalid_key")
+        res = requests.post("http://localhost:9006/chat", json={"prompt": "summarize /memory/example.txt"})
+        assert res.status_code == 200
+>       assert "tinyllama" in res.json()["response"].lower() or "fallback" in res.json()["response"].lower()
+E       AssertionError: assert ('tinyllama' in 'summary: 1 lines, 29 characters.' or 'fallback' in 'summary: 1 lines, 29 characters.')
+E        +  where 'summary: 1 lines, 29 characters.' = <built-in method lower of str object at 0x7f7ab3ab5110>()
+E        +    where <built-in method lower of str object at 0x7f7ab3ab5110> = 'Summary: 1 lines, 29 characters.'.lower
+E        +  and   'summary: 1 lines, 29 characters.' = <built-in method lower of str object at 0x7f7ab3ab5230>()
+E        +    where <built-in method lower of str object at 0x7f7ab3ab5230> = 'Summary: 1 lines, 29 characters.'.lower
+
+tests/rag_pack/tests/test_rag_openai_down.py:7: AssertionError
+_____________________________ test_partial_command _____________________________
+
+    def test_partial_command():
+        res = requests.post("http://localhost:9006/chat", json={"prompt": "summarize /memory"})
+        assert res.status_code == 200
+>       assert "directory" in res.json()["response"].lower() or "invalid" in res.json()["response"].lower()
+E       assert ('directory' in "sorry, i couldn't understand the prompt." or 'invalid' in "sorry, i couldn't understand the prompt.")
+E        +  where "sorry, i couldn't understand the prompt." = <built-in method lower of str object at 0x7f7ab3ab5710>()
+E        +    where <built-in method lower of str object at 0x7f7ab3ab5710> = "Sorry, I couldn't understand the prompt.".lower
+E        +  and   "sorry, i couldn't understand the prompt." = <built-in method lower of str object at 0x7f7ab3ab5590>()
+E        +    where <built-in method lower of str object at 0x7f7ab3ab5590> = "Sorry, I couldn't understand the prompt.".lower
+
+tests/rag_pack/tests/test_rag_partial_command.py:6: AssertionError
+=========================== short test summary info ============================
+FAILED tests/rag_pack/test_fallback_to_chat.py::test_fallback_to_chat - Asser...
+FAILED tests/rag_pack/test_list_dir.py::test_list_dir_tool - TypeError: 'modu...
+FAILED tests/rag_pack/test_natural_prompt_routing.py::test_natural_prompt_to_read_file
+FAILED tests/rag_pack/test_read_file.py::test_read_file_tool - TypeError: 'mo...
+FAILED tests/rag_pack/test_summarize_file.py::test_summarize_file_tool - Type...
+FAILED tests/rag_pack/tests/test_rag_empty_prompt.py::test_empty_prompt - ass...
+FAILED tests/rag_pack/tests/test_rag_missing_file.py::test_missing_file - Ass...
+FAILED tests/rag_pack/tests/test_rag_openai_down.py::test_openai_down - Asser...
+FAILED tests/rag_pack/tests/test_rag_partial_command.py::test_partial_command
+9 failed, 6 passed in 0.18s

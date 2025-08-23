@@ -1,0 +1,311 @@
+Script started on 2025-08-21 13:46:49+12:00 [COMMAND="./run_tests_menu.sh" TERM="xterm" TTY="/dev/pts/0" COLUMNS="157" LINES="93"]
+[H[2J[3JFranklin Test Suite
+-------------------
+1) API Pack
+2) RAG Pack
+3) Web UI Pack
+4) System Pack
+5) Fallback Pack
+6) Env Pack
+7) Logs Pack
+8) Plugins Pack
+9) Run ALL Packs
+10) Git Snapshot
+11) Export Public Snapshot
+12) RAG Deep Pack
+13) Stress Pack
+99) Franklin Health Check
+q) Quit
+
+Choose: 9
+[+] Running ALL Packs...
+[+] Running api tests...
+ERROR: usage: pytest [options] [file_or_dir] [file_or_dir] [...]
+pytest: error: unrecognized arguments: --json-report --json-report-file=/home/frank/docker/logs/test_results_api_20250821_134654.json
+  inifile: /home/frank/docker/franklin-dev/pytest.ini
+  rootdir: /home/frank/docker/franklin-dev
+
+[+] Running rag tests...
+ERROR: usage: pytest [options] [file_or_dir] [file_or_dir] [...]
+pytest: error: unrecognized arguments: --json-report --json-report-file=/home/frank/docker/logs/test_results_rag_20250821_134654.json
+  inifile: /home/frank/docker/franklin-dev/pytest.ini
+  rootdir: /home/frank/docker/franklin-dev
+
+[+] Running web_ui tests...
+ERROR: usage: pytest [options] [file_or_dir] [file_or_dir] [...]
+pytest: error: unrecognized arguments: --json-report --json-report-file=/home/frank/docker/logs/test_results_web_ui_20250821_134655.json
+  inifile: /home/frank/docker/franklin-dev/pytest.ini
+  rootdir: /home/frank/docker/franklin-dev
+
+[+] Running system_pack tests...
+[31mF[0m
+========================================================================= FAILURES ==========================================================================
+[31m[1m________________________________________________________________ test_secret_logic_encrypted ________________________________________________________________[0m
+
+    [94mdef[39;49;00m [92mtest_secret_logic_encrypted[39;49;00m():[90m[39;49;00m
+        logic_path = [33m"[39;49;00m[33m/app/ai_middleware/secret_logic.py[39;49;00m[33m"[39;49;00m[90m[39;49;00m
+    [90m[39;49;00m
+        [90m# Check if file exists[39;49;00m[90m[39;49;00m
+>       [94massert[39;49;00m os.path.exists(logic_path), [33mf[39;49;00m[33m"[39;49;00m[33m{[39;49;00mlogic_path[33m}[39;49;00m[33m does not exist[39;49;00m[33m"[39;49;00m[90m[39;49;00m
+[1m[31mE       AssertionError: /app/ai_middleware/secret_logic.py does not exist[0m
+[1m[31mE       assert False[0m
+[1m[31mE        +  where False = <function exists at 0x7fcc698cb240>('/app/ai_middleware/secret_logic.py')[0m
+[1m[31mE        +    where <function exists at 0x7fcc698cb240> = <module 'posixpath' (frozen)>.exists[0m
+[1m[31mE        +      where <module 'posixpath' (frozen)> = os.path[0m
+
+[1m[31mtests/system_pack/test_encrypted_logic.py[0m:9: AssertionError
+[36m[1m================================================================== short test summary info ==================================================================[0m
+[31mFAILED[0m tests/system_pack/test_encrypted_logic.py::[1mtest_secret_logic_encrypted[0m - AssertionError: /app/ai_middleware/secret_logic.py does not exist
+[31m[31m[1m1 failed[0m[31m in 0.06s[0m[0m
+[32m.[0m
+[32m[32m[1m1 passed[0m[32m in 0.00s[0m[0m
+[31mF[0m
+========================================================================= FAILURES ==========================================================================
+[31m[1m_____________________________________________________________ test_openai_api_key_in_container ______________________________________________________________[0m
+
+    [94mdef[39;49;00m [92mtest_openai_api_key_in_container[39;49;00m():[90m[39;49;00m
+        cwd = [33m"[39;49;00m[33m/home/frank/docker/docker-compose[39;49;00m[33m"[39;49;00m[90m[39;49;00m
+>       result = subprocess.run([90m[39;49;00m
+            [[33m"[39;49;00m[33mdocker[39;49;00m[33m"[39;49;00m, [33m"[39;49;00m[33mcompose[39;49;00m[33m"[39;49;00m, [33m"[39;49;00m[33mexec[39;49;00m[33m"[39;49;00m, [33m"[39;49;00m[33mai_middleware[39;49;00m[33m"[39;49;00m, [33m"[39;49;00m[33mprintenv[39;49;00m[33m"[39;49;00m, [33m"[39;49;00m[33mOPENAI_API_KEY[39;49;00m[33m"[39;49;00m],[90m[39;49;00m
+            capture_output=[94mTrue[39;49;00m, text=[94mTrue[39;49;00m, cwd=cwd[90m[39;49;00m
+        )[90m[39;49;00m
+
+[1m[31mtests/system_pack/test_env_vars_loaded.py[0m:5: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+[1m[31m/usr/lib/python3.11/subprocess.py[0m:548: in run
+    [94mwith[39;49;00m Popen(*popenargs, **kwargs) [94mas[39;49;00m process:[90m[39;49;00m
+[1m[31m/usr/lib/python3.11/subprocess.py[0m:1024: in __init__
+    [96mself[39;49;00m._execute_child(args, executable, preexec_fn, close_fds,[90m[39;49;00m
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <Popen: returncode: 255 args: ['docker', 'compose', 'exec', 'ai_middleware',...>
+args = ['docker', 'compose', 'exec', 'ai_middleware', 'printenv', 'OPENAI_API_KEY'], executable = b'docker', preexec_fn = None, close_fds = True
+pass_fds = (), cwd = '/home/frank/docker/docker-compose', env = None, startupinfo = None, creationflags = 0, shell = False, p2cread = -1, p2cwrite = -1
+c2pread = 5, c2pwrite = 6, errread = 7, errwrite = 8, restore_signals = True, gid = None, gids = None, uid = None, umask = -1, start_new_session = False
+process_group = -1
+
+    [94mdef[39;49;00m [92m_execute_child[39;49;00m([96mself[39;49;00m, args, executable, preexec_fn, close_fds,[90m[39;49;00m
+                       pass_fds, cwd, env,[90m[39;49;00m
+                       startupinfo, creationflags, shell,[90m[39;49;00m
+                       p2cread, p2cwrite,[90m[39;49;00m
+                       c2pread, c2pwrite,[90m[39;49;00m
+                       errread, errwrite,[90m[39;49;00m
+                       restore_signals,[90m[39;49;00m
+                       gid, gids, uid, umask,[90m[39;49;00m
+                       start_new_session, process_group):[90m[39;49;00m
+    [90m    [39;49;00m[33m"""Execute program (POSIX version)"""[39;49;00m[90m[39;49;00m
+    [90m[39;49;00m
+        [94mif[39;49;00m [96misinstance[39;49;00m(args, ([96mstr[39;49;00m, [96mbytes[39;49;00m)):[90m[39;49;00m
+            args = [args][90m[39;49;00m
+        [94melif[39;49;00m [96misinstance[39;49;00m(args, os.PathLike):[90m[39;49;00m
+            [94mif[39;49;00m shell:[90m[39;49;00m
+                [94mraise[39;49;00m [96mTypeError[39;49;00m([33m'[39;49;00m[33mpath-like args is not allowed when [39;49;00m[33m'[39;49;00m[90m[39;49;00m
+                                [33m'[39;49;00m[33mshell is true[39;49;00m[33m'[39;49;00m)[90m[39;49;00m
+            args = [args][90m[39;49;00m
+        [94melse[39;49;00m:[90m[39;49;00m
+            args = [96mlist[39;49;00m(args)[90m[39;49;00m
+    [90m[39;49;00m
+        [94mif[39;49;00m shell:[90m[39;49;00m
+            [90m# On Android the default shell is at '/system/bin/sh'.[39;49;00m[90m[39;49;00m
+            unix_shell = ([33m'[39;49;00m[33m/system/bin/sh[39;49;00m[33m'[39;49;00m [94mif[39;49;00m[90m[39;49;00m
+                      [96mhasattr[39;49;00m(sys, [33m'[39;49;00m[33mgetandroidapilevel[39;49;00m[33m'[39;49;00m) [94melse[39;49;00m [33m'[39;49;00m[33m/bin/sh[39;49;00m[33m'[39;49;00m)[90m[39;49;00m
+            args = [unix_shell, [33m"[39;49;00m[33m-c[39;49;00m[33m"[39;49;00m] + args[90m[39;49;00m
+            [94mif[39;49;00m executable:[90m[39;49;00m
+                args[[94m0[39;49;00m] = executable[90m[39;49;00m
+    [90m[39;49;00m
+        [94mif[39;49;00m executable [95mis[39;49;00m [94mNone[39;49;00m:[90m[39;49;00m
+            executable = args[[94m0[39;49;00m][90m[39;49;00m
+    [90m[39;49;00m
+        sys.audit([33m"[39;49;00m[33msubprocess.Popen[39;49;00m[33m"[39;49;00m, executable, args, cwd, env)[90m[39;49;00m
+    [90m[39;49;00m
+        [94mif[39;49;00m (_USE_POSIX_SPAWN[90m[39;49;00m
+                [95mand[39;49;00m os.path.dirname(executable)[90m[39;49;00m
+                [95mand[39;49;00m preexec_fn [95mis[39;49;00m [94mNone[39;49;00m[90m[39;49;00m
+                [95mand[39;49;00m [95mnot[39;49;00m close_fds[90m[39;49;00m
+                [95mand[39;49;00m [95mnot[39;49;00m pass_fds[90m[39;49;00m
+                [95mand[39;49;00m cwd [95mis[39;49;00m [94mNone[39;49;00m[90m[39;49;00m
+                [95mand[39;49;00m (p2cread == -[94m1[39;49;00m [95mor[39;49;00m p2cread > [94m2[39;49;00m)[90m[39;49;00m
+                [95mand[39;49;00m (c2pwrite == -[94m1[39;49;00m [95mor[39;49;00m c2pwrite > [94m2[39;49;00m)[90m[39;49;00m
+                [95mand[39;49;00m (errwrite == -[94m1[39;49;00m [95mor[39;49;00m errwrite > [94m2[39;49;00m)[90m[39;49;00m
+                [95mand[39;49;00m [95mnot[39;49;00m start_new_session[90m[39;49;00m
+                [95mand[39;49;00m process_group == -[94m1[39;49;00m[90m[39;49;00m
+                [95mand[39;49;00m gid [95mis[39;49;00m [94mNone[39;49;00m[90m[39;49;00m
+                [95mand[39;49;00m gids [95mis[39;49;00m [94mNone[39;49;00m[90m[39;49;00m
+                [95mand[39;49;00m uid [95mis[39;49;00m [94mNone[39;49;00m[90m[39;49;00m
+                [95mand[39;49;00m umask < [94m0[39;49;00m):[90m[39;49;00m
+            [96mself[39;49;00m._posix_spawn(args, executable, env, restore_signals,[90m[39;49;00m
+                              p2cread, p2cwrite,[90m[39;49;00m
+                              c2pread, c2pwrite,[90m[39;49;00m
+                              errread, errwrite)[90m[39;49;00m
+            [94mreturn[39;49;00m[90m[39;49;00m
+    [90m[39;49;00m
+        orig_executable = executable[90m[39;49;00m
+    [90m[39;49;00m
+        [90m# For transferring possible exec failure from child to parent.[39;49;00m[90m[39;49;00m
+        [90m# Data format: "exception name:hex errno:description"[39;49;00m[90m[39;49;00m
+        [90m# Pickle is not used; it is complex and involves memory allocation.[39;49;00m[90m[39;49;00m
+        errpipe_read, errpipe_write = os.pipe()[90m[39;49;00m
+        [90m# errpipe_write must not be in the standard io 0, 1, or 2 fd range.[39;49;00m[90m[39;49;00m
+        low_fds_to_close = [][90m[39;49;00m
+        [94mwhile[39;49;00m errpipe_write < [94m3[39;49;00m:[90m[39;49;00m
+            low_fds_to_close.append(errpipe_write)[90m[39;49;00m
+            errpipe_write = os.dup(errpipe_write)[90m[39;49;00m
+        [94mfor[39;49;00m low_fd [95min[39;49;00m low_fds_to_close:[90m[39;49;00m
+            os.close(low_fd)[90m[39;49;00m
+        [94mtry[39;49;00m:[90m[39;49;00m
+            [94mtry[39;49;00m:[90m[39;49;00m
+                [90m# We must avoid complex work that could involve[39;49;00m[90m[39;49;00m
+                [90m# malloc or free in the child process to avoid[39;49;00m[90m[39;49;00m
+                [90m# potential deadlocks, thus we do all this here.[39;49;00m[90m[39;49;00m
+                [90m# and pass it to fork_exec()[39;49;00m[90m[39;49;00m
+    [90m[39;49;00m
+                [94mif[39;49;00m env [95mis[39;49;00m [95mnot[39;49;00m [94mNone[39;49;00m:[90m[39;49;00m
+                    env_list = [][90m[39;49;00m
+                    [94mfor[39;49;00m k, v [95min[39;49;00m env.items():[90m[39;49;00m
+                        k = os.fsencode(k)[90m[39;49;00m
+                        [94mif[39;49;00m [33mb[39;49;00m[33m'[39;49;00m[33m=[39;49;00m[33m'[39;49;00m [95min[39;49;00m k:[90m[39;49;00m
+                            [94mraise[39;49;00m [96mValueError[39;49;00m([33m"[39;49;00m[33millegal environment variable name[39;49;00m[33m"[39;49;00m)[90m[39;49;00m
+                        env_list.append(k + [33mb[39;49;00m[33m'[39;49;00m[33m=[39;49;00m[33m'[39;49;00m + os.fsencode(v))[90m[39;49;00m
+                [94melse[39;49;00m:[90m[39;49;00m
+                    env_list = [94mNone[39;49;00m  [90m# Use execv instead of execve.[39;49;00m[90m[39;49;00m
+                executable = os.fsencode(executable)[90m[39;49;00m
+                [94mif[39;49;00m os.path.dirname(executable):[90m[39;49;00m
+                    executable_list = (executable,)[90m[39;49;00m
+                [94melse[39;49;00m:[90m[39;49;00m
+                    [90m# This matches the behavior of os._execvpe().[39;49;00m[90m[39;49;00m
+                    executable_list = [96mtuple[39;49;00m([90m[39;49;00m
+                        os.path.join(os.fsencode([96mdir[39;49;00m), executable)[90m[39;49;00m
+                        [94mfor[39;49;00m [96mdir[39;49;00m [95min[39;49;00m os.get_exec_path(env))[90m[39;49;00m
+                fds_to_keep = [96mset[39;49;00m(pass_fds)[90m[39;49;00m
+                fds_to_keep.add(errpipe_write)[90m[39;49;00m
+                [96mself[39;49;00m.pid = _fork_exec([90m[39;49;00m
+                        args, executable_list,[90m[39;49;00m
+                        close_fds, [96mtuple[39;49;00m([96msorted[39;49;00m([96mmap[39;49;00m([96mint[39;49;00m, fds_to_keep))),[90m[39;49;00m
+                        cwd, env_list,[90m[39;49;00m
+                        p2cread, p2cwrite, c2pread, c2pwrite,[90m[39;49;00m
+                        errread, errwrite,[90m[39;49;00m
+                        errpipe_read, errpipe_write,[90m[39;49;00m
+                        restore_signals, start_new_session,[90m[39;49;00m
+                        process_group, gid, gids, uid, umask,[90m[39;49;00m
+                        preexec_fn, _USE_VFORK)[90m[39;49;00m
+                [96mself[39;49;00m._child_created = [94mTrue[39;49;00m[90m[39;49;00m
+            [94mfinally[39;49;00m:[90m[39;49;00m
+                [90m# be sure the FD is closed no matter what[39;49;00m[90m[39;49;00m
+                os.close(errpipe_write)[90m[39;49;00m
+    [90m[39;49;00m
+            [96mself[39;49;00m._close_pipe_fds(p2cread, p2cwrite,[90m[39;49;00m
+                                 c2pread, c2pwrite,[90m[39;49;00m
+                                 errread, errwrite)[90m[39;49;00m
+    [90m[39;49;00m
+            [90m# Wait for exec to fail or succeed; possibly raising an[39;49;00m[90m[39;49;00m
+            [90m# exception (limited in size)[39;49;00m[90m[39;49;00m
+            errpipe_data = [96mbytearray[39;49;00m()[90m[39;49;00m
+            [94mwhile[39;49;00m [94mTrue[39;49;00m:[90m[39;49;00m
+                part = os.read(errpipe_read, [94m50000[39;49;00m)[90m[39;49;00m
+                errpipe_data += part[90m[39;49;00m
+                [94mif[39;49;00m [95mnot[39;49;00m part [95mor[39;49;00m [96mlen[39;49;00m(errpipe_data) > [94m50000[39;49;00m:[90m[39;49;00m
+                    [94mbreak[39;49;00m[90m[39;49;00m
+        [94mfinally[39;49;00m:[90m[39;49;00m
+            [90m# be sure the FD is closed no matter what[39;49;00m[90m[39;49;00m
+            os.close(errpipe_read)[90m[39;49;00m
+    [90m[39;49;00m
+        [94mif[39;49;00m errpipe_data:[90m[39;49;00m
+            [94mtry[39;49;00m:[90m[39;49;00m
+                pid, sts = os.waitpid([96mself[39;49;00m.pid, [94m0[39;49;00m)[90m[39;49;00m
+                [94mif[39;49;00m pid == [96mself[39;49;00m.pid:[90m[39;49;00m
+                    [96mself[39;49;00m._handle_exitstatus(sts)[90m[39;49;00m
+                [94melse[39;49;00m:[90m[39;49;00m
+                    [96mself[39;49;00m.returncode = sys.maxsize[90m[39;49;00m
+            [94mexcept[39;49;00m [96mChildProcessError[39;49;00m:[90m[39;49;00m
+                [94mpass[39;49;00m[90m[39;49;00m
+    [90m[39;49;00m
+            [94mtry[39;49;00m:[90m[39;49;00m
+                exception_name, hex_errno, err_msg = ([90m[39;49;00m
+                        errpipe_data.split([33mb[39;49;00m[33m'[39;49;00m[33m:[39;49;00m[33m'[39;49;00m, [94m2[39;49;00m))[90m[39;49;00m
+                [90m# The encoding here should match the encoding[39;49;00m[90m[39;49;00m
+                [90m# written in by the subprocess implementations[39;49;00m[90m[39;49;00m
+                [90m# like _posixsubprocess[39;49;00m[90m[39;49;00m
+                err_msg = err_msg.decode()[90m[39;49;00m
+            [94mexcept[39;49;00m [96mValueError[39;49;00m:[90m[39;49;00m
+                exception_name = [33mb[39;49;00m[33m'[39;49;00m[33mSubprocessError[39;49;00m[33m'[39;49;00m[90m[39;49;00m
+                hex_errno = [33mb[39;49;00m[33m'[39;49;00m[33m0[39;49;00m[33m'[39;49;00m[90m[39;49;00m
+                err_msg = [33m'[39;49;00m[33mBad exception data from child: [39;49;00m[33m{!r}[39;49;00m[33m'[39;49;00m.format([90m[39;49;00m
+                              [96mbytes[39;49;00m(errpipe_data))[90m[39;49;00m
+            child_exception_type = [96mgetattr[39;49;00m([90m[39;49;00m
+                    builtins, exception_name.decode([33m'[39;49;00m[33mascii[39;49;00m[33m'[39;49;00m),[90m[39;49;00m
+                    SubprocessError)[90m[39;49;00m
+            [94mif[39;49;00m [96missubclass[39;49;00m(child_exception_type, [96mOSError[39;49;00m) [95mand[39;49;00m hex_errno:[90m[39;49;00m
+                errno_num = [96mint[39;49;00m(hex_errno, [94m16[39;49;00m)[90m[39;49;00m
+                child_exec_never_called = (err_msg == [33m"[39;49;00m[33mnoexec[39;49;00m[33m"[39;49;00m)[90m[39;49;00m
+                [94mif[39;49;00m child_exec_never_called:[90m[39;49;00m
+                    err_msg = [33m"[39;49;00m[33m"[39;49;00m[90m[39;49;00m
+                    [90m# The error must be from chdir(cwd).[39;49;00m[90m[39;49;00m
+                    err_filename = cwd[90m[39;49;00m
+                [94melse[39;49;00m:[90m[39;49;00m
+                    err_filename = orig_executable[90m[39;49;00m
+                [94mif[39;49;00m errno_num != [94m0[39;49;00m:[90m[39;49;00m
+                    err_msg = os.strerror(errno_num)[90m[39;49;00m
+>               [94mraise[39;49;00m child_exception_type(errno_num, err_msg, err_filename)[90m[39;49;00m
+[1m[31mE               FileNotFoundError: [Errno 2] No such file or directory: '/home/frank/docker/docker-compose'[0m
+
+[1m[31m/usr/lib/python3.11/subprocess.py[0m:1901: FileNotFoundError
+[36m[1m================================================================== short test summary info ==================================================================[0m
+[31mFAILED[0m tests/system_pack/test_env_vars_loaded.py::[1mtest_openai_api_key_in_container[0m - FileNotFoundError: [Errno 2] No such file or directory: '/home/frank/docker/docker-compose'
+[31m[31m[1m1 failed[0m[31m in 0.11s[0m[0m
+[+] Continuing with remaining packs...
+[+] Running fallback tests...
+ERROR: usage: pytest [options] [file_or_dir] [file_or_dir] [...]
+pytest: error: unrecognized arguments: --json-report --json-report-file=/home/frank/docker/logs/test_results_fallback_20250821_134656.json
+  inifile: /home/frank/docker/franklin-dev/pytest.ini
+  rootdir: /home/frank/docker/franklin-dev
+
+[+] Running env tests...
+ERROR: usage: pytest [options] [file_or_dir] [file_or_dir] [...]
+pytest: error: unrecognized arguments: --json-report --json-report-file=/home/frank/docker/logs/test_results_env_20250821_134656.json
+  inifile: /home/frank/docker/franklin-dev/pytest.ini
+  rootdir: /home/frank/docker/franklin-dev
+
+[+] Running logs tests...
+ERROR: usage: pytest [options] [file_or_dir] [file_or_dir] [...]
+pytest: error: unrecognized arguments: --json-report --json-report-file=/home/frank/docker/logs/test_results_logs_20250821_134656.json
+  inifile: /home/frank/docker/franklin-dev/pytest.ini
+  rootdir: /home/frank/docker/franklin-dev
+
+[+] Running plugins tests...
+ERROR: usage: pytest [options] [file_or_dir] [file_or_dir] [...]
+pytest: error: unrecognized arguments: --json-report --json-report-file=/home/frank/docker/logs/test_results_plugins_20250821_134657.json
+  inifile: /home/frank/docker/franklin-dev/pytest.ini
+  rootdir: /home/frank/docker/franklin-dev
+
+[+] Running rag_deep_pack tests...
+[31mERROR: usage: pytest [options] [file_or_dir] [file_or_dir] [...]
+pytest: error: unrecognized arguments: --json-report --json-report-file=/home/frank/docker/logs/test_results_20250821_134657.json
+  inifile: /home/frank/docker/franklin-dev/pytest.ini
+  rootdir: /home/frank/docker/franklin-dev
+[0m
+[+] Running stress tests...
+ERROR: usage: pytest [options] [file_or_dir] [file_or_dir] [...]
+pytest: error: unrecognized arguments: --json-report --json-report-file=/home/frank/docker/logs/test_results_stress_20250821_134657.json
+  inifile: /home/frank/docker/franklin-dev/pytest.ini
+  rootdir: /home/frank/docker/franklin-dev
+
+[H[2J[3JFranklin Test Suite
+-------------------
+1) API Pack
+2) RAG Pack
+3) Web UI Pack
+4) System Pack
+5) Fallback Pack
+6) Env Pack
+7) Logs Pack
+8) Plugins Pack
+9) Run ALL Packs
+10) Git Snapshot
+11) Export Public Snapshot
+12) RAG Deep Pack
+13) Stress Pack
+99) Franklin Health Check
+q) Quit
+
+Choose: ^C
+Script done on 2025-08-21 13:47:41+12:00 [COMMAND_EXIT_CODE="130"]

@@ -1,0 +1,24 @@
+import os
+import pytest
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except Exception:
+    # dotenv is optional for test envs
+    pass
+
+@pytest.fixture(scope="session")
+def base_url(pytestconfig):
+    # Prefer env, then --base-url, then default to the host-mapped API
+    cli = None
+    try:
+        cli = pytestconfig.getoption("--base-url")
+    except Exception:
+        pass
+    return os.getenv("BASE_URL") or cli or "http://localhost:9006"
+
+@pytest.fixture(scope="session")
+def openai_key():
+    # Some tests may read this; empty string is fine if keyless mode is expected
+    return os.getenv("OPENAI_API_KEY", "")

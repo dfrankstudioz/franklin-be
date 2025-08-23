@@ -1,0 +1,6 @@
+echo "8) Config & Env Validation" >> run_tests_menu.sh
+elif [ "$choice" == "8" ]; then
+    echo "▶️ Running test_env_injection.py"
+    python3 ../tests/test_env_injection.py | tee ../logs/env_injection_output.txt
+    echo "▶️ Running test_compose_validation.py"
+    python3 ../tests/test_compose_validation.py | tee ../logs/compose_validation_output.txt

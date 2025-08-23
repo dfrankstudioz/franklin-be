@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+ROOT="$HOME/docker"
+MENU_DIR="$ROOT/tests/menu"
+LOG_DIR="$ROOT/logs"
+mkdir -p "$LOG_DIR"
+TS="$(date +%Y%m%d_%H%M%S)"
+LOGFILE="$LOG_DIR/run_all_${TS}.log"
+
+# Save original FDs for live updates BEFORE redirecting; mirror output to log
+exec 3>&1 4>&2
+exec > >(tee -a "$LOGFILE") 2>&1
+
+SCRIPTS=(
+  "api_tests.sh"
+  "rag_tests.sh"
+  "web_ui_tests.sh"
+  "routing_tests.sh"
+  "env_config_tests.sh"
+  "docker_health_tests.sh"
+  "logs_snapshot.sh"
+  "plugins_tests.sh"
+)
+
+# --- tuning ---
+# Expected seconds per step (used to animate within‑step %). Change if you like.
+STEP_EXPECTED_SEC=${STEP_EXPECTED_SEC:-20}
+
+total=${#SCRIPTS[@]}
+ok=0 fail=0
+
+human() { local s=$1; printf "%02d:%02d:%02d" "$((s/3600))" "$(((s%3600)/60))" "$((s%60))"; }
+
+draw_bar_width_pct() {
+  local pct=$1 width=${2:-30}
+  (( pct<0 )) && pct=0
+  (( pct>100 )) && pct=100
+  local fill=$(( pct * width / 100 ))
+  local rest=$(( width - fill ))
+  printf "[%s%s] %3d%%" "$(printf '%*s' "$fill" '' | tr ' ' '#')" "$(printf '%*s' "$rest" '' | tr ' ' '-')" "$pct"
+}
+
+# TTY detection: if TTY, we redraw one line; else heartbeat prints every 5s
+USE_TTY=0
+if [[ -t 3 && "${TERM:-}" != "dumb" && -z "${RUN_ALL_NO_TTY:-}" ]]; then USE_TTY=1; fi
+redraw() { [[ $USE_TTY -eq 1 ]] && printf "\r\033[K%s" "$*" >&3 || echo "$*"; }
+
+echo "Run ALL started at $(date '+%F %T')  → logging to $LOGFILE"
+suite_start=$(date +%s)
+
+for i in "${!SCRIPTS[@]}"; do
+  step="${SCRIPTS[$i]}"
+  echo
+  echo "=== Running ${step} ==="
+
+  start=$(date +%s)
+  bash "$MENU_DIR/$step" &
+  pid=$!
+
+  hb_last=-1
+  while kill -0 "$pid" 2>/dev/null; do
+    # within‑step progress (0–95%), based on elapsed vs expected
+    elapsed=$(( $(date +%s) - start ))
+    sub=$(( 100 * elapsed / STEP_EXPECTED_SEC ))
+    (( sub > 95 )) && sub=95
+    # overall progress across all steps, including within‑step
+    overall_num=$(( i*100 + sub ))
+    overall_pct=$(( overall_num / total ))
+
+    line="Progress $(draw_bar_width_pct "$overall_pct" 30)  $(printf '%d/%d' "$i" "$total")  •  ${step}  •  elapsed $(human "$elapsed")"
+    if [[ $USE_TTY -eq 1 ]]; then
+      redraw "$line"
+      sleep 1
+    else
+      # heartbeat every 5s when no TTY, so logs aren’t spammy
+      if (( elapsed / 5 > hb_last )); then
+        hb_last=$(( elapsed / 5 ))
+        echo "$line"
+      fi
+      sleep 1
+    fi
+  done
+
+  status=0
+  wait "$pid" || status=$?
+  elapsed=$(( $(date +%s) - start ))
+
+  # After completion, count this step fully
+  completed=$(( i + 1 ))
+  overall_pct=$(( completed * 100 / total ))
+  [[ $USE_TTY -eq 1 ]] && printf "\r\033[K" >&3 || true
+
+  if [[ $status -eq 0 ]]; then
+    echo "✓ ${step} OK  (duration: $(human "$elapsed"))"
+    ((ok++))
+  else
+    echo "✗ ${step} FAILED  (duration: $(human "$elapsed"))"
+    ((fail++))
+  fi
+
+  echo "Progress: $(draw_bar_width_pct "$overall_pct" 30)  ${completed}/${total}"
+done
+
+suite_elapsed=$(( $(date +%s) - suite_start ))
+echo
+echo "Summary: ${ok} OK, ${fail} failed  •  Total time: $(human "$suite_elapsed")"
+exit 0

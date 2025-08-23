@@ -1,0 +1,87 @@
+[2025-07-27 10:28:09] 🧠 Starting AI Middleware Preflight + Test Suite (v5)
+
+[2025-07-27 10:28:09] 🔍 Checking Docker containers...
+[2025-07-27 10:28:09] ✅ Container ollama is running.
+[2025-07-27 10:28:09] ✅ Container ai_middleware is running.
+[2025-07-27 10:28:09] ✅ Container gpt-relay is running.
+[2025-07-27 10:28:09] 🔍 Checking open ports...
+[2025-07-27 10:28:09] ✅ Port 11434 (Ollama) is open.
+[2025-07-27 10:28:09] ✅ Port 9000 (GPT Relay) is open.
+[2025-07-27 10:28:09] ✅ Port 9006 (Middleware) is open.
+[2025-07-27 10:28:09] 🔍 Checking API endpoints...
+[2025-07-27 10:28:09] ❌ /api/version failed with status 404
+[2025-07-27 10:28:09] ❌ /api/tags failed with status 404
+[2025-07-27 10:28:09] 🔍 Logs for ai_middleware:
+INFO:     172.18.0.1:57422 - "POST /api/chat HTTP/1.1" 404 Not Found
+INFO:     172.18.0.1:57428 - "POST /api/files/upload HTTP/1.1" 404 Not Found
+INFO:     172.18.0.1:57438 - "POST /api/files/upload HTTP/1.1" 404 Not Found
+INFO:     172.18.0.1:57450 - "POST /api/chat HTTP/1.1" 404 Not Found
+INFO:     172.18.0.1:57452 - "POST /api/chat HTTP/1.1" 404 Not Found
+INFO:     172.18.0.1:57456 - "GET /api/tags HTTP/1.1" 404 Not Found
+INFO:     172.18.0.1:57470 - "POST /api/chat HTTP/1.1" 404 Not Found
+INFO:     172.18.0.1:57476 - "GET /api/version HTTP/1.1" 404 Not Found
+INFO:     172.18.0.1:48118 - "GET /api/version HTTP/1.1" 404 Not Found
+INFO:     172.18.0.1:48120 - "GET /api/tags HTTP/1.1" 404 Not Found
+INFO:     172.18.0.1:48126 - "POST /api/chat HTTP/1.1" 404 Not Found
+INFO:     172.18.0.1:48132 - "POST /api/files/upload HTTP/1.1" 404 Not Found
+INFO:     172.18.0.1:48146 - "POST /api/files/upload HTTP/1.1" 404 Not Found
+INFO:     172.18.0.1:60440 - "POST /api/chat HTTP/1.1" 404 Not Found
+INFO:     172.18.0.1:60456 - "POST /api/chat HTTP/1.1" 404 Not Found
+INFO:     172.18.0.1:60460 - "GET /api/tags HTTP/1.1" 404 Not Found
+INFO:     172.18.0.1:60476 - "POST /api/chat HTTP/1.1" 404 Not Found
+INFO:     172.18.0.1:60478 - "GET /api/version HTTP/1.1" 404 Not Found
+INFO:     172.18.0.1:34556 - "GET /api/version HTTP/1.1" 404 Not Found
+INFO:     172.18.0.1:34570 - "GET /api/tags HTTP/1.1" 404 Not Found
+
+[2025-07-27 10:28:09] 🔍 Logs for gpt-relay:
+
+[2025-07-27 10:28:09] 
+🧪 Running AI Middleware Functional Tests...
+
+[2025-07-27 10:28:09] ▶️ Running test_ollama_status.py...
+✅ Ollama is reachable.
+
+[2025-07-27 10:28:09] ✅ test_ollama_status.py PASSED
+
+[2025-07-27 10:28:09] ▶️ Running test_gpt_relay.py...
+❌ GPT relay test failed: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
+
+[2025-07-27 10:28:09] ❌ test_gpt_relay.py FAILED
+
+[2025-07-27 10:28:09] ▶️ Running test_ai_middleware.py...
+❌ Middleware test failed: 
+
+[2025-07-27 10:28:10] ❌ test_ai_middleware.py FAILED
+
+[2025-07-27 10:28:10] ▶️ Running test_file_upload.py...
+❌ File upload test failed: 
+
+[2025-07-27 10:28:10] ❌ test_file_upload.py FAILED
+
+[2025-07-27 10:28:10] ▶️ Running test_rag.py...
+❌ RAG test failed: 
+
+[2025-07-27 10:28:12] ❌ test_rag.py FAILED
+
+[2025-07-27 10:28:12] ▶️ Running test_rag_fallback.py...
+❌ RAG fallback test failed: 
+
+[2025-07-27 10:28:12] ❌ test_rag_fallback.py FAILED
+
+[2025-07-27 10:28:12] ▶️ Running test_model_list.py...
+❌ Model list test failed: 
+
+[2025-07-27 10:28:12] ❌ test_model_list.py FAILED
+
+[2025-07-27 10:28:12] ▶️ Running test_streaming_response.py...
+✅ Streaming test passed (1 chunks).
+
+[2025-07-27 10:28:12] ✅ test_streaming_response.py PASSED
+
+[2025-07-27 10:28:12] ▶️ Running test_version_output.py...
+❌ Version test failed: 
+
+[2025-07-27 10:28:12] ❌ test_version_output.py FAILED
+
+[2025-07-27 10:28:12] ✅ All tests complete.
+

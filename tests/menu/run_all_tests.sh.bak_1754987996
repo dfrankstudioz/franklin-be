@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+ROOT="$HOME/docker"
+MENU_DIR="$ROOT/tests/menu"
+LOG_DIR="$ROOT/logs"
+mkdir -p "$LOG_DIR"
+TS="$(date +%Y%m%d_%H%M%S)"
+LOGFILE="$LOG_DIR/run_all_${TS}.log"
+
+# Mirror stdout/stderr to combined logfile
+exec > >(tee -a "$LOGFILE") 2>&1
+
+SCRIPTS=(
+  "api_tests.sh"
+  "rag_tests.sh"
+  "web_ui_tests.sh"
+  "routing_tests.sh"
+  "env_config_tests.sh"
+  "docker_health_tests.sh"
+  "logs_snapshot.sh"
+  "plugins_tests.sh"
+)
+
+ok=0 fail=0
+for s in "${SCRIPTS[@]}"; do
+  echo -e "\n=== Running $s ==="
+  if bash "$MENU_DIR/$s"; then
+    echo "✓ $s OK"; ((ok++))
+  else
+    echo "✗ $s FAILED (continuing)"; ((fail++))
+  fi
+done
+
+echo -e "\nSummary: ${ok} OK, ${fail} failed"
+exit 0
