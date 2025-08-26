@@ -1,7 +1,26 @@
+import os
 import re
-from tools.list_dir import list_dir
-from tools.read_file import read_file
-from tools.summarize_file import summarize_file
+
+def list_dir(path: str):
+    try:
+        return os.listdir(path)
+    except Exception as e:
+        return [f"Error: {str(e)}"]
+
+def read_file(path: str):
+    try:
+        with open(path, "r") as f:
+            return f.read()
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def summarize_file(path: str):
+    # Basic placeholder summary
+    content = read_file(path)
+    if isinstance(content, str):
+        lines = content.strip().splitlines()
+        return f"Summary: {len(lines)} lines, {len(content)} characters"
+    return content
 
 def improve_prompt_context(prompt: str):
     prompt_lower = prompt.lower()
@@ -12,16 +31,14 @@ def improve_prompt_context(prompt: str):
 
     # Read file
     if "read" in prompt_lower or "show contents" in prompt_lower:
-        if "notreal" in prompt_lower or "missing" in prompt_lower:
-            return "Error: file not found"  # triggers file not found stub
-        match = re.search(r'([a-zA-Z0-9_\-]+\.txt)', prompt)
+        match = re.search(r'([a-zA-Z0-9_\-]+\.(txt|md|log))', prompt)
         if match:
             filename = match.group(1)
             return read_file(f"/memory/{filename}")
 
     # Summarize file
     if "summarize" in prompt_lower:
-        match = re.search(r'([a-zA-Z0-9_\-]+\.txt)', prompt)
+        match = re.search(r'([a-zA-Z0-9_\-]+\.(txt|md|log))', prompt)
         if match:
             filename = match.group(1)
             return summarize_file(f"/memory/{filename}")
