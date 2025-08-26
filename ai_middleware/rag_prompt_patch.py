@@ -15,12 +15,13 @@ def read_file(path: str):
         return f"Error: {str(e)}"
 
 def summarize_file(path: str):
-    # Basic placeholder summary
     content = read_file(path)
+    if isinstance(content, str) and content.lower().startswith("error"):
+        return content
     if isinstance(content, str):
         lines = content.strip().splitlines()
         return f"Summary: {len(lines)} lines, {len(content)} characters"
-    return content
+    return "Invalid content"
 
 def improve_prompt_context(prompt: str):
     prompt_lower = prompt.lower()
