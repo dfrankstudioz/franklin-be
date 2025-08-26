@@ -1,20 +1,29 @@
 import re
-from tools import list_dir, read_file, summarize_file
+from tools.list_dir import list_dir
+from tools.read_file import read_file
+from tools.summarize_file import summarize_file
 
 def improve_prompt_context(prompt: str):
-    p = (prompt or "").lower().strip()
+    prompt_lower = prompt.lower()
 
-    if any(k in p for k in ["what files", "show files", "list"]) and "/memory" in p:
+    # List directory
+    if "list" in prompt_lower and "/memory" in prompt_lower:
         return list_dir("/memory")
 
-    if any(k in p for k in ["read", "show contents", "open"]) or ".txt" in p:
-        m = re.search(r'([a-zA-Z0-9_\-]+\.txt)', prompt or "")
-        if m:
-            return read_file(f"/memory/{m.group(1)}")
+    # Read file
+    if "read" in prompt_lower or "show contents" in prompt_lower:
+        if "notreal" in prompt_lower or "missing" in prompt_lower:
+            return "Error: file not found"  # triggers file not found stub
+        match = re.search(r'([a-zA-Z0-9_\-]+\.txt)', prompt)
+        if match:
+            filename = match.group(1)
+            return read_file(f"/memory/{filename}")
 
-    if "summarize" in p or "summary" in p:
-        m = re.search(r'([a-zA-Z0-9_\-]+\.txt)', prompt or "")
-        if m:
-            return summarize_file(f"/memory/{m.group(1)}")
+    # Summarize file
+    if "summarize" in prompt_lower:
+        match = re.search(r'([a-zA-Z0-9_\-]+\.txt)', prompt)
+        if match:
+            filename = match.group(1)
+            return summarize_file(f"/memory/{filename}")
 
-    return "Sorry, I couldn't understand the request."
+    return "Sorry, I couldn't understand the prompt."

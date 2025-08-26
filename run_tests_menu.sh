@@ -1,3 +1,4 @@
+export PYTHONPATH=$(pwd)
 #!/bin/bash
 PACKS="./tests"
 

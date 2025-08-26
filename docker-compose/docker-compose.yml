@@ -1,19 +1,17 @@
-version: '3.8'
+version: "3.9"
 services:
-  ai-middleware:
+  ai_middleware:
+    image: ai-middleware
     build:
-      context: ../ai-middleware
+      context: ../ai_middleware
       dockerfile: Dockerfile
     ports:
       - "9006:80"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PYTHONPATH=/app
     volumes:
-      - ../ai-middleware:/app/ai-middleware:cached
-      - ../web-ui/dist:/app/ui:cached
-      - ../memory:/memory:cached
-    env_file:
-      - .env
-
-  ollama:
-    image: ollama/ollama
-    ports:
-      - "11434:11434"
+      - ../ai_middleware:/app/ai_middleware
+      - ../logs:/logs
+      - ../memory:/memory
+      - ../config:/config
