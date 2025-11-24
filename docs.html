@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Documentation — Franklin BE</title>
+  <meta name="description" content="Documentation index for Franklin BE: getting started, guides, troubleshooting, licensing, FAQ, and legal docs.">
+  <link rel="icon" href="/franklin-logo.png">
+  <style>
+    :root{
+      --bg:#f3f7f8;
+      --panel:#fff;
+      --muted:#9fb6c6;
+      --text:#041021;
+      --header-bg:#07212a;
+      --header-fg:#e9f8fb;
+      --card-radius:12px;
+      --max-width:1100px;
+      --accent:#064251;
+    }
+    html,body{height:100%}
+    body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
+    header{height:64px;background:var(--header-bg);color:var(--header-fg);display:flex;align-items:center}
+    .header-inner{max-width:var(--max-width);margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:36px;height:36;border-radius:8px;background:linear-gradient(135deg,#2ac0ea,#064251);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+    nav a{color:var(--header-fg);text-decoration:none;margin-left:12px}
+    .main{max-width:900px;margin:64px auto;padding:0 16px}
+    .card{background:var(--panel);padding:22px;border-radius:var(--card-radius);box-shadow:0 12px 30px rgba(6,18,26,0.06)}
+    h1{margin-top:0}
+    .muted{color:var(--muted);font-size:14px}
+    .section{margin-top:18px}
+    ul.index{padding-left:18px}
+    li.item{margin-bottom:10px}
+    a.doc-link{color:var(--accent);text-decoration:none;font-weight:600}
+    footer{max-width:var(--max-width);margin:28px auto;padding:0 16px;color:#3B5055}
+    .legal{margin-top:10px;padding:14px;background:#f7fbfc;border-radius:8px;color:#23373b}
+    .repo-files{margin-top:12px;padding:12px;background:#f9ffff;border-radius:8px;font-size:14px}
+    .small{font-size:13px;color:#5a7075}
+    @media (max-width:640px){
+      .main{margin:28px auto}
+      header{height:56px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">FR</div>
+        <div>
+          <strong>Franklin BE</strong>
+          <div class="muted" style="font-size:12px">Documentation</div>
+        </div>
+      </div>
+      <nav>
+        <a href="/index.html">Home</a>
+        <a href="/about.html" style="margin-left:8px">About</a>
+        <a href="/support.html" style="margin-left:8px">Support</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="card">
+      <h1>Documentation Index (Updated)</h1>
+      <p class="muted">A concise set of documentation pages and direct links to files in the repository.</p>
+
+      <div class="section">
+        <h2>Primary Docs</h2>
+        <ul class="index" aria-labelledby="primary-docs">
+          <li class="item"><a class="doc-link" href="/getting-started.html">Getting Started</a> — Install Franklin, access the Web UI, activate your license, and run your first commands.</li>
+          <li class="item"><a class="doc-link" href="/docs_index.html">Documentation Index (flat)</a> — Alternate index page (if present in the repo).</li>
+          <li class="item"><a class="doc-link" href="/docs.html">Franklin Guide</a> — All-in-one guide covering daily usage, tools, and maintenance.</li>
+          <li class="item"><a class="doc-link" href="/faq.html">FAQ</a> — Helpful answers to common questions.</li>
+          <li class="item"><a class="doc-link" href="/support.html">Support</a> — How to contact support and report issues.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Legal & Licensing</h2>
+        <p class="muted">Legal and licensing documents available in the repo.</p>
+        <div class="legal">
+          <ul class="index">
+            <li class="item"><a class="doc-link" href="/licence.html">License</a> — License and activation information.</li>
+            <li class="item"><a class="doc-link" href="/terms-and-conditions.html">Terms & Conditions</a> — Rules for using Franklin.</li>
+            <li class="item"><a class="doc-link" href="/privacy-policy.html">Privacy Policy</a> — Data handling and privacy practices.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Additional Pages</h2>
+        <ul class="index">
+          <li class="item"><a class="doc-link" href="/about.html">About</a> — Project background and credits.</li>
+          <li class="item"><a class="doc-link" href="/blog.html">Blog</a> — Announcements and release highlights.</li>
+          <li class="item"><a class="doc-link" href="/creator.html">Creator</a> — Creator / author info.</li>
+          <li class="item"><a class="doc-link" href="/index.html">Landing Page</a> — Main site entry point.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Repository files</h2>
+        <p class="small">Direct links to files and folders located at the repository root (useful for previewing or downloading individual pages).</p>
+        <div class="repo-files">
+          <ul class="index">
+            <li class="item"><a class="doc-link" href="/assets/">/assets/</a> — Static assets (images, CSS, JS).</li>
+            <li class="item"><a class="doc-link" href="/about.html">about.html</a></li>
+            <li class="item"><a class="doc-link" href="/blog.html">blog.html</a></li>
+            <li class="item"><a class="doc-link" href="/creator.html">creator.html</a></li>
+            <li class="item"><a class="doc-link" href="/docs.html">docs.html</a></li>
+            <li class="item"><a class="doc-link" href="/docs_index.html">docs_index.html</a></li>
+            <li class="item"><a class="doc-link" href="/faq.html">faq.html</a></li>
+            <li class="item"><a class="doc-link" href="/getting-started.html">getting-started.html</a></li>
+            <li class="item"><a class="doc-link" href="/index.html">index.html</a></li>
+            <li class="item"><a class="doc-link" href="/licence.html">licence.html</a></li>
+            <li class="item"><a class="doc-link" href="/privacy-policy.html">privacy-policy.html</a></li>
+            <li class="item"><a class="doc-link" href="/support.html">support.html</a></li>
+            <li class="item"><a class="doc-link" href="/terms-and-conditions.html">terms-and-conditions.html</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section" style="margin-top:18px">
+        <h2>Need doc changes or offline copies?</h2>
+        <p class="muted">If you'd like a single downloadable PDF or a Markdown bundle for offline reference, I can generate that. I can also reorganize or expand pages and add OS-specific install commands.</p>
+        <p class="small">Report missing steps or request examples: <a class="doc-link" href="mailto:support@dfrankstudioz.com">support@dfrankstudioz.com</a> — typical response in 24–48 hours.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div style="max-width:1100px;margin:0 auto;padding:0 16px;color:#3B5055">
+      <a href="/about.html">About</a> • <a href="/support.html">Support</a> • <a href="/faq.html">FAQ</a>
+    </div>
+  </footer>
+</body>
+</html>
