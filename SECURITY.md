@@ -1,3 +1,6 @@
 # Security Policy
 
-Report issues to support@dfrankstudioz.com
+If you discover a security issue, email:
+support@dfrankstudioz.com
+
+Do NOT open public issues for vulnerabilities.
