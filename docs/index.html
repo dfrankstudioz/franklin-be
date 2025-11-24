@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Franklin — Docs</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Optional web font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>Franklin</h1>
+        <p class="subtitle">Local‑First AI — Builder’s Edition</p>
+      </div>
+
+      <nav class="nav">
+        <ul id="nav-list">
+          <!-- populated by app.js -->
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="toggle-theme" aria-label="Toggle dark mode">🌙</button>
+        <small>Serving local files from /content</small>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="content-header">
+        <input id="search" placeholder="Search page..." aria-label="Search content" />
+      </header>
+
+      <article id="doc">
+        <!-- rendered markdown will appear here -->
+      </article>
+
+      <footer class="content-footer">
+        <small>Franklin BE — local docs • last updated 2025‑11‑24</small>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Marked for Markdown -> HTML, DOMPurify for sanitizing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@2.5.2/dist/purify.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
