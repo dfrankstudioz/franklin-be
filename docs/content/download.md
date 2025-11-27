@@ -37,22 +37,14 @@ After the containers start successfully, open:
 
 ## 🎛 System Requirements
 
-- **Operating System:**  
-  Linux, macOS, or Windows
-- **Runtime:**  
-  Docker + Docker Compose
-- **CPU:**  
-  Any modern CPU; local models require more  
-- **RAM:**  
-  4GB+ (8GB+ recommended)
-- **Disk:**  
-  2GB free minimum
+- Linux, macOS, or Windows  
+- Docker + Docker Compose  
+- 4GB+ RAM (8GB recommended)  
+- 2GB disk space  
 
 ---
 
 ## 🔄 Updating Franklin
-
-To update from a previous version:
 
 ```bash
 cd franklin-be
@@ -61,22 +53,15 @@ docker compose down
 docker compose up -d --build
 ```
 
-Or download the new ZIP from GitHub Releases.
-
 ---
 
 ## 🧪 Demo Version (Free)
 
-A limited demo build is available for users who want to explore Franklin without a license.
-
-**Download Demo:**  
 ➡️ https://github.com/dfrankstudioz/franklin-be-demo
 
 ---
 
 ## 🗂 Previous Versions
-
-Older releases are archived here:
 
 ➡️ https://github.com/dfrankstudioz/franklin-be/releases
 
@@ -84,7 +69,7 @@ Older releases are archived here:
 
 ## 🔐 Licensing
 
-Franklin BE is proprietary software. A valid license key is required to unlock all premium features.
+Franklin BE is proprietary software.
 
 📜 Full License Terms:  
 https://dfrankstudioz.github.io/franklin-be/#/licence
@@ -93,15 +78,7 @@ https://dfrankstudioz.github.io/franklin-be/#/licence
 
 ## 🧰 Support
 
-For help, feature requests, or bug reports:
-
-📧 **support@dfrankstudioz.com**  
-💬 Discord: *(link to server)*  
+📧 support@dfrankstudioz.com  
 🐞 GitHub Issues: https://github.com/dfrankstudioz/franklin-be/issues
 
 ---
-
-## ❤️ Thank You
-
-Thank you for supporting Franklin BE.  
-You’re helping build a new category of local-first AI tools designed for real world builders and homelabbers.
