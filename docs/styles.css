@@ -2,7 +2,7 @@
   --bg: #0f1720;
   --panel:#0b1220;
   --muted:#9aa4b2;
-  --accent:#60a5fa;
+  --accent:#00c8c8;
   --text:#e6eef8;
   --surface:#0d1520;
   --glass: rgba(255,255,255,0.03);
@@ -110,7 +110,7 @@ article#doc a:hover{text-decoration:underline}
   --bg:#f6f9fc;
   --panel:#ffffff;
   --muted:#5b6b76;
-  --accent:#1e88ff;
+  --accent:#00a7a7;
   --text:#0b1924;
   --surface:#ffffff;
   --glass: rgba(2,6,23,0.03);

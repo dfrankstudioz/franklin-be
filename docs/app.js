@@ -4,6 +4,7 @@
 const pages = [
   { title: "About", file: "about.md" },
   { title: "Getting Started", file: "getting-started.md" },
+  { title: "Download", file: "download.md" },
   { title: "FAQ", file: "faq.md" },
   { title: "Support", file: "support.md" },
   { title: "License (EULA)", file: "licence.md" },
